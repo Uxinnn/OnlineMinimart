@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, DateTime, String, inspect
+from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from db.models import Base
