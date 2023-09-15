@@ -13,17 +13,17 @@ def create(raw_item):
 
 
 def all_records():
-  items = select(Item)
-  result = session.execute(items).scalars().all()
+  query = select(Item)
+  items = session.execute(query).scalars().all()
 
-  return [item.to_dict() for item in result]
+  return [item.to_dict() for item in items]
 
 
 def find(item_id):
-  item = select(Item).where(Item.id == item_id)
-  result = session.execute(item).scalars().one_or_none()
+  query = select(Item).where(Item.id == item_id)
+  item = session.execute(query).scalars().one_or_none()
 
-  return result.to_dict()
+  return item.to_dict()
 
 
 def update_record(item):
@@ -39,6 +39,9 @@ def update_record(item):
 
 def delete_record(_id):
   item = session.query(Item).filter_by(id=_id).first()
+  print(item.to_dict())
 
   session.delete(item)
   session.commit()
+
+  return item.to_dict()

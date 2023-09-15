@@ -1,0 +1,43 @@
+service: online-minimart
+frameworkVersion: '2 || 3'
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+
+functions:
+  get-one-item:
+    handler: src/functions/web/api/v1/items.get
+    events:
+      - httpApi:
+          path: /web/api/v1/items/{id}
+          method: get
+  get-all-items:
+    handler: src/functions/web/api/v1/items.get_all
+    events:
+      - httpApi:
+          path: /web/api/v1/items
+          method: get
+  create-item:
+    handler: src/functions/web/api/v1/items.create
+    events:
+      - httpApi:
+          path: /web/api/v1/items
+          method: post
+  update-item:
+    handler: src/functions/web/api/v1/items.update
+    events:
+      - httpApi:
+          path: /web/api/v1/items/{id}
+          method: put
+  delete-item:
+    handler: src/functions/web/api/v1/items.delete
+    events:
+      - httpApi:
+          path: /web/api/v1/items/{id}
+          method: delete
+
+plugins:
+  - serverless-offline
+
