@@ -3,6 +3,12 @@ import Axios from 'axios';
 const baseUrl = "http://localhost:3001"
 
 
+const getAllItems = () => {
+  const items = Axios.get(baseUrl + "/web/api/v1/items");
+  
+  return items;
+}
+
 const createItem = (body) => {
   Axios.post(baseUrl + '/web/api/v1/items/', body)
   .then(function (response) {
@@ -37,6 +43,7 @@ const deleteItem = (id) => {
 }
 
 export {
+  getAllItems, 
   createItem,
   editItem,  
   deleteItem

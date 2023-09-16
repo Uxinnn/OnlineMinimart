@@ -10,6 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import ItemActions from './ItemActions';
 import ItemCreateDialog from './ItemCreateDialog';
+import {getAllItems} from '../apis.js'
 
 
 
@@ -35,14 +36,14 @@ const ItemList = props => {
   };
 
   React.useEffect(() => {
-    Axios.get("http://localhost:3001/web/api/v1/items").then((data)=>{
+    getAllItems().then((data)=>{
     setItemList(data.data)
     });
   }, [])
 
   return (
     <div>
-      <h2>Items Catalog</h2>
+      <h2>Items Management Catalog</h2>
       <ItemCreateDialog />
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
