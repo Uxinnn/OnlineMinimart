@@ -88,7 +88,7 @@ const UserItemList = props => {
                         }
                         return (
                           <TableCell key={column.id}>
-                            {row[column.id]}
+                            {(column.id === 'price') ? row[column.id].toFixed(2) : row[column.id]}
                           </TableCell>
                         );
                       })}
@@ -124,15 +124,17 @@ const UserItemList = props => {
           </TableHead>
           <TableBody>
             {Object.keys(cart).map((key, index) => {
-              return (
-                <React.Fragment>
-                  <TableRow>
-                    <TableCell>{cart[key]['item']['name']}</TableCell>
-                    <TableCell align="right">{cart[key]['count']}</TableCell>
-                    <TableCell align="right">{cart[key]['itemPrice'].toFixed(2)}</TableCell>
-                  </TableRow>
-                </React.Fragment>
-              );
+              if (cart[key]['count'] > 0) {
+                return (
+                  <React.Fragment>
+                    <TableRow>
+                      <TableCell>{cart[key]['item']['name']}</TableCell>
+                      <TableCell align="right">{cart[key]['count']}</TableCell>
+                      <TableCell align="right">{cart[key]['itemPrice'].toFixed(2)}</TableCell>
+                    </TableRow>
+                  </React.Fragment>
+                );
+              }
             })}
             <TableRow>
               <TableCell><b>Total Cost:</b></TableCell>
