@@ -6,8 +6,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from '@mui/material';
+import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
 import Box from '@mui/material/Box';
+import {deleteItem, editItem} from "../apis.js";
 
 
 const ItemActions = ({item}) => {
@@ -21,30 +22,19 @@ const ItemActions = ({item}) => {
     setOpenEdit(false);
   };
 
-  const handleSave = (event) => {
+  const handleEdit = (event) => {
     event.preventDefault();
-    Axios.put('http://localhost:3001/web/api/v1/items/' + item.id, {
+    const body = {
       name: event.target.name.value,
       qty: Number(event.target.qty.value), 
       price: Number(event.target.price.value)
-    })
-    .then(function (response) {
-      console.log(response);
-      window.location.reload();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    };
+    editItem(item.id, body);
   }
 
-  const handleDelete = () => {
-    Axios.delete('http://localhost:3001/web/api/v1/items/' + item.id)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+  const handleDelete = (event) => {
+    event.preventDefault();
+    deleteItem(item.id);
   }
 
   return (
@@ -57,7 +47,7 @@ const ItemActions = ({item}) => {
         <DeleteIcon />
       </IconButton>
 
-      {/* Dialog boxes for actions when clicked */}
+      {/* Dialog box for edit */}
       <Dialog open={openEdit} onClose={handleCloseEdit} fullWidth='true'>
         <DialogActions>
           <IconButton color="primary" aria-label="close dialog" autoFocus onClick={handleCloseEdit}>
@@ -75,7 +65,7 @@ const ItemActions = ({item}) => {
           }}
           noValidate
           autoComplete="off"
-          onSubmit={handleSave}
+          onSubmit={handleEdit}
         >
           <TextField
             id="edit-name"
@@ -100,7 +90,7 @@ const ItemActions = ({item}) => {
             name="price"
             defaultValue={item.price}
           />
-          <Button type="submit" variant="outlined">Save</Button>
+          <Button type="submit" variant="outlined" variant="contained">Save</Button>
         </Box>
         </DialogContent>
       </Dialog>

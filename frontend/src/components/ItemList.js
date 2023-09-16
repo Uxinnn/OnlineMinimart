@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import ItemActions from './ItemActions';
+import ItemCreateDialog from './ItemCreateDialog';
 
 
 
@@ -42,6 +43,7 @@ const ItemList = props => {
   return (
     <div>
       <h2>Items Catalog</h2>
+      <ItemCreateDialog />
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
