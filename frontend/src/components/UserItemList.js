@@ -20,7 +20,7 @@ const columns = [
   { id: 'amount', label: 'Amount', minWidth: 100}
 ];
 
-const UserItemList = props => {
+const UserItemList = () => {
   const [itemList, setItemList] = React.useState([]);
   const [cart, setCart] = React.useState({});
   const [page, setPage] = React.useState(0);

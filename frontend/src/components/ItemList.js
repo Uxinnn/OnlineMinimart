@@ -21,7 +21,7 @@ const columns = [
   { id: 'actions', label: 'Actions', minWidth: 100}
 ];
 
-const ItemList = props => {
+const ItemList = () => {
   const [itemList, setItemList] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
