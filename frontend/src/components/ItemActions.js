@@ -1,5 +1,4 @@
 import React from 'react';
-import Axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,7 +7,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
 import Box from '@mui/material/Box';
-import {deleteItem, editItem} from "../apis.js";
+import {deleteItem, editItem} from "../Apis.js";
+import { Refresh } from '@mui/icons-material';
 
 
 const ItemActions = ({item}) => {
@@ -29,7 +29,7 @@ const ItemActions = ({item}) => {
       qty: Number(event.target.qty.value), 
       price: Number(event.target.price.value)
     };
-    editItem(item.id, body);
+    editItem(item.id, body, true);
   }
 
   const handleDelete = (event) => {

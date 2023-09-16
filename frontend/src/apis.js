@@ -20,11 +20,13 @@ const createItem = (body) => {
   });
 }
 
-const editItem = (id, body) => {
+const editItem = (id, body, refresh=false) => {
   Axios.put(baseUrl + '/web/api/v1/items/' + id, body)
   .then(function (response) {
     console.log(response);
-    window.location.reload();
+    if (refresh) {
+      window.location.reload();
+    }
   })
   .catch(function (error) {
     console.log(error);

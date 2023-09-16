@@ -1,5 +1,4 @@
 import React from 'react';
-import Axios from 'axios';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,21 +7,22 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import ItemActions from './ItemActions';
-import ItemCreateDialog from './ItemCreateDialog';
 import {getAllItems} from '../Apis.js'
-
+import ItemCounter from './itemCounter';
+import { Button } from '@mui/material';
+import { editItem } from '../Apis.js';
 
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
   { id: 'qty', label: 'Quantity', minWidth: 100 },
   { id: 'price', label: 'Price', minWidth: 100}, 
-  { id: 'actions', label: 'Actions', minWidth: 100}
+  { id: 'amount', label: 'Amount', minWidth: 100}
 ];
 
-const ItemList = props => {
+const UserItemList = props => {
   const [itemList, setItemList] = React.useState([]);
+  const [cart, setCart] = React.useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -37,14 +37,26 @@ const ItemList = props => {
 
   React.useEffect(() => {
     getAllItems().then((data)=>{
-    setItemList(data.data)
+      setItemList(data.data)
     });
   }, [])
 
+  const handleAddToCart = (item, count) => {
+    setCart({
+      ...cart,
+      [item.id]: {"count": count, "item": item, "itemPrice": (count * item['price'])}
+    })
+  }
+
+  const handlePay = () => {
+    for (const [itemId, itemData] of Object.entries(cart)) {
+      editItem(itemId, {'qty': itemData['item']['qty'] - itemData['count']}, true);
+    };
+  }
+
   return (
     <div>
-      <h2>Items Management Catalog</h2>
-      <ItemCreateDialog />
+      <h2>Items Catalog</h2>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -67,10 +79,10 @@ const ItemList = props => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1}>
                       {columns.map((column) => {
-                        if (column.id === "actions") {
+                        if (column.id === "amount") {
                           return (
                             <TableCell>
-                              <ItemActions item={row} />
+                              <ItemCounter item={row} handleAddToCart={handleAddToCart} />
                             </TableCell>
                             )
                         }
@@ -99,8 +111,45 @@ const ItemList = props => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <h3>Your Cart</h3>
+      <TableContainer component={Paper} sx={{ maxWidth: 600 , my: 2}}>
+        <Table aria-label="cart table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Item</TableCell>
+              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Item Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.keys(cart).map((key, index) => {
+              return (
+                <React.Fragment>
+                  <TableRow>
+                    <TableCell>{cart[key]['item']['name']}</TableCell>
+                    <TableCell align="right">{cart[key]['count']}</TableCell>
+                    <TableCell align="right">{cart[key]['itemPrice'].toFixed(2)}</TableCell>
+                  </TableRow>
+                </React.Fragment>
+              );
+            })}
+            <TableRow>
+              <TableCell><b>Total Cost:</b></TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">
+                {Object.keys(cart).reduce((previous, key) => {
+                  return previous + cart[key].itemPrice;
+                }, 0).toFixed(2)
+                }
+              </TableCell>
+            </TableRow>
+          </TableBody>
+          <Button variant='contained' sx={{m: 2}} onClick={handlePay}>Pay</Button>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
 
-export default ItemList
+export default UserItemList
