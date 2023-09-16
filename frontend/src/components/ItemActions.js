@@ -12,9 +12,6 @@ import Box from '@mui/material/Box';
 
 const ItemActions = ({item}) => {
   const [openEdit, setOpenEdit] = React.useState(false);
-  const [editName, setEditName] = React.useState(item.name);
-  const [editQty, setEditQty] = React.useState(item.qty);
-  const [editPrice, setEditPrice] = React.useState(item.price);
 
   const handleOpenEdit = () => {
     setOpenEdit(true);
@@ -24,37 +21,16 @@ const ItemActions = ({item}) => {
     setOpenEdit(false);
   };
 
-  const handleNameChange = (event) => {
-    setEditName(event.target.value)
-  }
-
-  const handleQtyChange = (event) => {
-    setEditQty(event.target.value)
-  }
-
-  const handlePriceChange = (event) => {
-    setEditPrice(event.target.value)
-  }
-
-
   const handleSave = (event) => {
-    alert(JSON.stringify({
-      name: editName, 
-      qty: Number(editQty), 
-      price: Number(editPrice)
-    }))
+    event.preventDefault();
     Axios.put('http://localhost:3001/web/api/v1/items/' + item.id, {
-      name: editName, 
-      qty: Number(editQty), 
-      price: Number(editPrice)
+      name: event.target.name.value,
+      qty: Number(event.target.qty.value), 
+      price: Number(event.target.price.value)
     })
-    // Axios.put('http://localhost:3001/web/api/v1/items/' + item.id, {
-    //   name: event.target.name.value,
-    //   qty: Number(event.target.qty.value), 
-    //   price: Number(event.target.price.value)
-    // })
     .then(function (response) {
       console.log(response);
+      window.location.reload();
     })
     .catch(function (error) {
       console.log(error);
@@ -99,7 +75,6 @@ const ItemActions = ({item}) => {
           }}
           noValidate
           autoComplete="off"
-          // onSubmit={handleSave}
           onSubmit={handleSave}
         >
           <TextField
@@ -107,7 +82,6 @@ const ItemActions = ({item}) => {
             label="Name"
             name="name"
             defaultValue={item.name}
-            onChange={handleNameChange}
             fullWidth
           />
           <TextField
@@ -115,7 +89,6 @@ const ItemActions = ({item}) => {
             label="Quantity"
             name="qty"
             defaultValue={item.qty}
-            onChange={handleQtyChange}
             type="number"
             InputLabelProps={{
               shrink: true,
@@ -126,10 +99,9 @@ const ItemActions = ({item}) => {
             label="price"
             name="price"
             defaultValue={item.price}
-            onChange={handlePriceChange}
           />
+          <Button type="submit" variant="outlined">Save</Button>
         </Box>
-        <Button onClick={handleSave} variant="outlined">Save</Button>
         </DialogContent>
       </Dialog>
     </React.Fragment>
