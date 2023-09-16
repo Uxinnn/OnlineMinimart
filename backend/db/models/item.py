@@ -12,6 +12,7 @@ class Item(Base):
   id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=lambda: uuid.uuid4())
   name: Mapped[str] = mapped_column(String)
   qty: Mapped[int] = mapped_column()
+  price: Mapped[float] = mapped_column()
 
   # Methods
   def to_dict(self):
