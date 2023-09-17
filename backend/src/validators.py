@@ -47,7 +47,7 @@ def validate_item_name(name):
   # and spaces)
   if type(name) != str:
     raise TypeError(f"Invalid item name type: {type(name)}")
-  if not (name.isalnum() or name.isspace()):
+  if not all(c.isalpha() or c.isspace() for c in name) or not name.strip():
     raise ValueError(f"Invalid item name: {name}")
 
 

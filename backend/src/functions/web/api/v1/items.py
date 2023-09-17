@@ -1,8 +1,8 @@
 import logging
 import json
 import src.services.item_service as item_service
-from src.utils import UUIDEncoder, success
-from src.validators import validate_item, unprocessable_entity, unknown_errors
+from src.utils import UUIDEncoder, success, unprocessable_entity, unknown_errors
+from src.validators import validate_item
 
 
 """
@@ -23,7 +23,7 @@ def create(event, context):
   raw_item = json.loads(event["body"])
   # Ensure item key and values are valid.
   try:
-    validate_item(raw_item)
+    validate_item(raw_item, strict=False)
   except (KeyError, ValueError, TypeError) as e:
     logging.error(e)
     return unprocessable_entity("")
@@ -81,7 +81,7 @@ def update(event, context):
   try:
     # Ensure item key and values are valid.
     item["id"] = event["pathParameters"]["id"]
-    validate_item(item)
+    validate_item(item, strict=False)
   except (KeyError, ValueError, TypeError) as e:
     logging.error(e)
     return unprocessable_entity("")
@@ -106,7 +106,7 @@ def bulk_update(event, context):
   try:
     # Ensure item key and values are valid.
     for item in items:
-      validate_item(item)
+      validate_item(item, strict=False)
   except (KeyError, ValueError, TypeError) as e:
     logging.error(e)
     return unprocessable_entity("")
