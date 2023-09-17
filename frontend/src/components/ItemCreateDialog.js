@@ -1,13 +1,12 @@
 import React from 'react';
-import Axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import TextField from '@mui/material/TextField';
 import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
 import Box from '@mui/material/Box';
 import {createItem} from '../Apis.js';
+import {InputAdornment, TextField} from '@mui/material';
 
 
 const ItemCreateDialog = () => {
@@ -24,11 +23,43 @@ const handleOpenCreate = () => {
   const handleCreate = (event) => {
     event.preventDefault();
     const body = {
-      name: event.target.name.value,
+      name: event.target.name.value.trim(),
       qty: Number(event.target.qty.value), 
       price: Number(event.target.price.value)
     }
     createItem(body);
+  }
+
+  const [errors, setErrors] = React.useState({
+    "name": false, 
+    "qty": false, 
+    "price": false
+  });
+
+  const [formValues, setFormValues] = React.useState({
+    "name": "", 
+    "qty": 0, 
+    "price": 0
+  })
+
+  const disableEnterSubmit = (event) => {
+    if (event.keyCode === 13 ) {
+      event.preventDefault();
+    }
+  }
+
+  const handleBlur = (event) => {
+    setErrors({
+      ...errors,
+      [event.target.name]: event.target.validity.patternMismatch || (event.target.value.trim() === "")
+    });
+  };
+
+  const handleFormChange = (event) => {
+    setFormValues({
+      ...formValues,
+      [event.target.name]: event.target.value
+    })
   }
 
   return (
@@ -60,25 +91,65 @@ const handleOpenCreate = () => {
         >
           <TextField
             id="create-name"
-            label="Name"
+            label={errors["name"] ? "Error" : "Name"}
             name="name"
+            type="text"
             fullWidth
+            error={errors["name"]}
+            onBlur={handleBlur}
+            onChange={handleFormChange}
+            onKeyDown={disableEnterSubmit}
+            value={formValues["name"]}
+            helperText={errors["name"] ? "Invalid name specified. Only alphanumeric characters and space allowed." : ""}
+            inputProps={{
+              pattern: '[a-zA-Z0-9 ]*', 
+            }}
           />
           <TextField
             id="create-qty"
-            label="Quantity"
+            label={errors["qty"] ? "Error" : "Quantity"}
             name="qty"
-            type="number"
+            type="text"
+            error={errors["qty"]}
+            onBlur={handleBlur}
+            onChange={handleFormChange}
+            onKeyDown={disableEnterSubmit}
+            value={formValues["qty"]}
+            helperText={errors["qty"] ? "Invalid quantity specified." : ""}
             InputLabelProps={{
-              shrink: true,
+              shrink: true
+            }}
+            inputProps={{
+              inputMode: 'numeric', 
+              pattern: '[0-9]*', 
             }}
           />
           <TextField
             id="create-price"
-            label="price"
+            label={errors["price"] ? "Error" : "Price"}
             name="price"
+            type="text"
+            error={errors["price"]}
+            onBlur={handleBlur}
+            onChange={handleFormChange}
+            onKeyDown={disableEnterSubmit}
+            value={formValues["price"]}
+            helperText={errors["price"] ? "Invalid price specified." : ""}
+            InputProps={{
+              startAdornment: (<InputAdornment position="start">$</InputAdornment>)
+            }}
+            inputProps={{
+              inputMode: 'numeric', 
+              pattern: '[0-9]*[.]?[0-9]+'
+            }}
           />
-          <Button type="submit" variant="outlined" variant="contained">Add item</Button>
+          <Button 
+            type="submit" 
+            variant="contained"
+            disabled={(errors['name'] || errors['qty'] || errors['price']) ? true : false}
+          >
+            Add item
+          </Button>
         </Box>
       </DialogContent>
     </Dialog>
