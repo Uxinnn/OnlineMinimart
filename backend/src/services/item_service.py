@@ -1,5 +1,5 @@
 from sqlalchemy import select, update
-from db.models import Item
+from db.models.item import Item
 from db.database import session
 
 
