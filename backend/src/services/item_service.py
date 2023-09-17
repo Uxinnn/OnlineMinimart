@@ -3,6 +3,12 @@ from db.models.item import Item
 from db.database import session
 
 
+"""
+This file contains functions used to hide SQLAlchemy logic from API functions (that are situated in 
+`src/functions/web/api/v1`).
+Functions in this file contains SQLAlchemy logic used to interact with the database.
+"""
+
 def create(raw_item):
   item = Item(**raw_item)
   session.add(item)

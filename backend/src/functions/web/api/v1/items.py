@@ -5,12 +5,23 @@ from src.utils import UUIDEncoder, success
 from src.validators import validate_item, unprocessable_entity, unknown_errors
 
 
+"""
+This file contains CRUD functions that will be called by API and are used to modify items in the database.
+Functions return a response code based on the success of the function call.
+In the event of a failed function call, the error will be logged, and a generic response code will be returned 
+to prevent clients from being able to view detailed errors in the backend.
+"""
+
 logging.getLogger().setLevel(logging.INFO)
 
 
 def create(event, context):
+  """
+  Creates a new item in the database.
+  """
   logging.info(f"Create item: {event}")
   raw_item = json.loads(event["body"])
+  # Ensure item key and values are valid.
   try:
     validate_item(raw_item)
   except (KeyError, ValueError, TypeError) as e:
@@ -27,6 +38,9 @@ def create(event, context):
 
 
 def get_all(event, context):
+  """
+  Retrieve all items in the database.
+  """
   logging.info(f"Get all items: {event}")
   try:
     items = item_service.all_records()
@@ -41,6 +55,9 @@ def get_all(event, context):
 
 
 def get(event, context):
+  """
+  Get a single item by id from the database.
+  """
   logging.info(f"Get item: {event}")
   try:
     _id = event["pathParameters"]["id"]
@@ -56,9 +73,13 @@ def get(event, context):
 
 
 def update(event, context):
+  """
+  Update a single item by id in the database.
+  """
   logging.info(f"Update item: {event}")
   item = json.loads(event['body'])
   try:
+    # Ensure item key and values are valid.
     item["id"] = event["pathParameters"]["id"]
     validate_item(item)
   except (KeyError, ValueError, TypeError) as e:
@@ -77,9 +98,13 @@ def update(event, context):
 
 
 def bulk_update(event, context):
+  """
+  Update a list of items by id in the database.
+  """
   logging.info(f"Update items: {event}")
   items = json.loads(event['body'])
   try:
+    # Ensure item key and values are valid.
     for item in items:
       validate_item(item)
   except (KeyError, ValueError, TypeError) as e:
@@ -98,6 +123,9 @@ def bulk_update(event, context):
 
 
 def delete(event, context):
+  """
+  Delete an item by id from the database.
+  """
   logging.info(f"Delete item: {event}")
   _id = event["pathParameters"]["id"]
   try:

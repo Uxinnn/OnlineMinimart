@@ -7,6 +7,11 @@ from src.utils import sample_items
 from config import DB_URL
 
 
+"""
+Creates the database used by the application and populate it with some sample data if the database does not exist.
+Then create an SQLAlchemy session object that will be used by the backend to interact with the database.
+"""
+
 engine = create_engine(DB_URL)
 
 init_db = not database_exists(engine.url)
