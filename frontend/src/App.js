@@ -2,10 +2,10 @@ import './App.css';
 import React from 'react';
 import {Container, CssBaseline} from "@mui/material";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import ItemList from "./components/ItemList.js"
-import UserItemList from './components/UserItemList';
-import Home from './components/Home';
-import NavBar from "./components/NavBar.js"
+import NavBar from "./components/NavBar"
+import AdminPage from "./pages/AdminPage"
+import UserPage from './pages/UserPage';
+import Home from './pages/Home';
 
 function App() {
   const router = createBrowserRouter([
@@ -15,11 +15,11 @@ function App() {
     }, 
     {
       path: "/user",
-      element: <UserItemList />,
+      element: <UserPage />,
     },
     {
       path: "/admin",
-      element: <ItemList />,
+      element: <AdminPage />,
     },
   ]);
 

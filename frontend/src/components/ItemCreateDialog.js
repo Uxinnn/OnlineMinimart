@@ -1,18 +1,26 @@
 import React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import {Dialog, DialogTitle, DialogContent, DialogActions} from '@mui/material';
-import Box from '@mui/material/Box';
+import {Button, IconButton, Box, InputAdornment, TextField, Dialog,
+  DialogTitle, DialogContent, DialogActions} from '@mui/material';
 import {createItem} from '../Apis.js';
-import {InputAdornment, TextField} from '@mui/material';
 
 
 const ItemCreateDialog = () => {
-const [openCreate, setOpenCreate] = React.useState(false);
+  const [openCreate, setOpenCreate] = React.useState(false);
+  const [errors, setErrors] = React.useState({
+    "name": false,
+    "qty": false,
+    "price": false
+  });
 
-const handleOpenCreate = () => {
+  const [formValues, setFormValues] = React.useState({
+    "name": "",
+    "qty": 0,
+    "price": 0
+  })
+
+  const handleOpenCreate = () => {
     setOpenCreate(true);
   };
 
@@ -29,18 +37,6 @@ const handleOpenCreate = () => {
     }
     createItem(body);
   }
-
-  const [errors, setErrors] = React.useState({
-    "name": false, 
-    "qty": false, 
-    "price": false
-  });
-
-  const [formValues, setFormValues] = React.useState({
-    "name": "", 
-    "qty": 0, 
-    "price": 0
-  })
 
   const disableEnterSubmit = (event) => {
     if (event.keyCode === 13 ) {
@@ -135,18 +131,19 @@ const handleOpenCreate = () => {
             onKeyDown={disableEnterSubmit}
             value={formValues["price"]}
             helperText={errors["price"] ? "Invalid price specified." : ""}
+            // Note: there is InputProps with a capital I and inputProps with a small i
             InputProps={{
               startAdornment: (<InputAdornment position="start">$</InputAdornment>)
             }}
             inputProps={{
               inputMode: 'numeric', 
-              pattern: '[0-9]*[.]?[0-9]+'
+              pattern: '[0-9]*[.]?[0-9]+'  // Decimal value only
             }}
           />
           <Button 
             type="submit" 
             variant="contained"
-            disabled={(errors['name'] || errors['qty'] || errors['price']) ? true : false}
+            disabled={(errors['name'] || errors['qty'] || errors['price'])}
           >
             Add item
           </Button>

@@ -2,17 +2,32 @@ import React from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import {Dialog, DialogTitle, DialogContent, DialogActions, InputAdornment} from '@mui/material';
-import Box from '@mui/material/Box';
+import {IconButton, Button, TextField, Box, Dialog, DialogTitle,
+  DialogContent, DialogActions, InputAdornment} from '@mui/material';
 import {deleteItem, editItem} from "../Apis.js";
 
 
 const ItemActions = ({item}) => {
-  const [openEdit, setOpenEdit] = React.useState(false);
+  // Used for admins to edit or delete items in the store.
 
+  // For opening/closing the edit item dialog
+  const [openEdit, setOpenEdit] = React.useState(false);
+  // Used for input validation to edit item form.
+  // If input fails validation, then form cannot be submitted.
+  const [errors, setErrors] = React.useState({
+    "name": false,
+    "qty": false,
+    "price": false
+  });
+  // Keeps track of current values in edit item form.
+  // To be used for input validation.
+  const [formValues, setFormValues] = React.useState({
+    "name": item.name,
+    "qty": item.qty,
+    "price": item.price
+  })
+
+  // For opening/closing edit item dialog
   const handleOpenEdit = () => {
     setOpenEdit(true);
   };
@@ -21,6 +36,7 @@ const ItemActions = ({item}) => {
     setOpenEdit(false);
   };
 
+  // For updating database after an item has been edited.
   const handleEdit = (event) => {
     event.preventDefault();
     const body = {
@@ -31,31 +47,27 @@ const ItemActions = ({item}) => {
     editItem(item.id, body, true);
   }
 
-  const [errors, setErrors] = React.useState({
-    "name": false, 
-    "qty": false, 
-    "price": false
-  });
-
-  const [formValues, setFormValues] = React.useState({
-    "name": item.name, 
-    "qty": item.qty, 
-    "price": item.price
-  })
-
+  // Prevents accidental submission of edit item form by pressing 'enter'.
+  // Forces admins to face input validation when submitting edit item form
+  // since pressing 'enter' can avoid validation.
   const disableEnterSubmit = (event) => {
     if (event.keyCode === 13 ) {
       event.preventDefault();
     }
   }
 
+  // Whenever a field in the edit item form is filled and the admin
+  // clicks away, this runs to validate the field value.
   const handleBlur = (event) => {
     setErrors({
       ...errors,
-      [event.target.name]: event.target.validity.patternMismatch || (event.target.value.trim() === "")
+      [event.target.name]: event.target.validity.patternMismatch ||
+      (event.target.value.trim() === "")
     });
   };
 
+  // Update field values in the edit item form whenever it changes.
+  // Done like this to facilitate input validation.
   const handleFormChange = (event) => {
     setFormValues({
       ...formValues,
@@ -63,6 +75,7 @@ const ItemActions = ({item}) => {
     })
   }
 
+  // Deletes the item from the database.
   const handleDelete = (event) => {
     event.preventDefault();
     deleteItem(item.id);
@@ -89,6 +102,7 @@ const ItemActions = ({item}) => {
           {item.name}
         </DialogTitle>
         <DialogContent>
+        {/*Edit item form starts here*/}
         <Box
           component="form"
           sx={{
@@ -111,7 +125,7 @@ const ItemActions = ({item}) => {
             value={formValues["name"]}
             helperText={errors["name"] ? "Invalid name specified. Only alphanumeric characters and space allowed." : ""}
             inputProps={{
-              pattern: '[a-zA-Z0-9 ]*', 
+              pattern: '[a-zA-Z0-9 ]*', // Limit characters used to reduce the chances of this being misused.
             }}
           />
           <TextField
@@ -144,18 +158,19 @@ const ItemActions = ({item}) => {
             onKeyDown={disableEnterSubmit}
             value={formValues["price"]}
             helperText={errors["price"] ? "Invalid price specified." : ""}
+            // Note: there is InputProps with a capital I and inputProps with a small i
             InputProps={{
               startAdornment: (<InputAdornment position="start">$</InputAdornment>)
             }}
             inputProps={{
               inputMode: 'numeric', 
-              pattern: '[0-9]*[.]?[0-9]+'
+              pattern: '[0-9]*[.]?[0-9]+'  // Decimal value only
             }}
           />
           <Button 
             type="submit" 
             variant="contained"
-            disabled={(errors['name'] || errors['qty'] || errors['price']) ? true : false}
+            disabled={(errors['name'] || errors['qty'] || errors['price'])}
           >
             Save
           </Button>

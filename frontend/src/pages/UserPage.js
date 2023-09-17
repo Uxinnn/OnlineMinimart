@@ -1,14 +1,7 @@
 import React from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import ItemCounter from './itemCounter';
-import { Button } from '@mui/material';
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead,
+  TablePagination, TableRow, Button} from '@mui/material';
+import ItemCounter from '../components/itemCounter.js';
 import { editItems, getAllItems } from '../Apis.js';
 
 
@@ -19,12 +12,28 @@ const columns = [
   { id: 'amount', label: 'Amount', minWidth: 100}
 ];
 
-const UserItemList = () => {
+const UserPage = () => {
+  // User page for customers to browse and buy items from the minimart.
+
+  // Use to retreive all items from database since number of items is small.
+  // If there are large number of items, can consider fetching based on range
+  // to prevent retrieval taking too long and using too much memory storing all
+  // items.
   const [itemList, setItemList] = React.useState([]);
+  // Used to keep track of items to be bought and their price.
   const [cart, setCart] = React.useState({});
+  // States used for pagination of table
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  // Retrieve all items
+  React.useEffect(() => {
+    getAllItems().then((data)=>{
+      setItemList(data.data)
+    });
+  }, [])
+
+  // Handles used to manage pagination
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -34,12 +43,7 @@ const UserItemList = () => {
     setPage(0);
   };
 
-  React.useEffect(() => {
-    getAllItems().then((data)=>{
-      setItemList(data.data)
-    });
-  }, [])
-
+  // Use this to add/remove items from cart whenever a customer selects an item
   const handleAddToCart = (item, count) => {
     setCart({
       ...cart,
@@ -47,6 +51,7 @@ const UserItemList = () => {
     })
   }
 
+  // Called when the customer clicks pay. Use to update item quantity in database.
   const handlePay = () => {
     const items = [];
     for (const [itemId, itemData] of Object.entries(cart)) {
@@ -64,6 +69,8 @@ const UserItemList = () => {
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
+
+            {/*Creating table column headers*/}
             <TableHead>
               <TableRow>
                 {columns.map((column) => (
@@ -76,6 +83,8 @@ const UserItemList = () => {
                 ))}
               </TableRow>
             </TableHead>
+
+            {/*Populate table with items with pagination*/}
             <TableBody>
               {itemList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -86,6 +95,7 @@ const UserItemList = () => {
                         if (column.id === "amount") {
                           return (
                             <TableCell>
+                              {/*Contains logic for adding/removing items to cart*/}
                               <ItemCounter item={row} handleAddToCart={handleAddToCart} />
                             </TableCell>
                             )
@@ -96,9 +106,6 @@ const UserItemList = () => {
                           </TableCell>
                         );
                       })}
-                      <TableCell>
-
-                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -116,6 +123,7 @@ const UserItemList = () => {
         />
       </Paper>
 
+      {/*Payment cart logic for customers to see items to be purchased and total cost*/}
       <h3>Your Cart</h3>
       <TableContainer component={Paper} sx={{ maxWidth: 600 , my: 2}}>
         <Table aria-label="cart table">
@@ -130,17 +138,16 @@ const UserItemList = () => {
             {Object.keys(cart).map((key, index) => {
               if (cart[key]['count'] > 0) {
                 return (
-                  <React.Fragment>
                     <TableRow>
                       <TableCell>{cart[key]['item']['name']}</TableCell>
                       <TableCell align="right">{cart[key]['count']}</TableCell>
                       <TableCell align="right">{cart[key]['itemPrice'].toFixed(2)}</TableCell>
                     </TableRow>
-                  </React.Fragment>
                 );
               }
             })}
             <TableRow>
+              {/*Calculate and show total cost*/}
               <TableCell><b>Total Cost:</b></TableCell>
               <TableCell></TableCell>
               <TableCell align="right">
@@ -158,4 +165,4 @@ const UserItemList = () => {
   );
 }
 
-export default UserItemList
+export default UserPage
