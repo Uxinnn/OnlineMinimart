@@ -42,6 +42,15 @@ def update(event, context):
           }
 
 
+def bulk_update(event, context):
+  items = json.loads(event['body'])
+  items = item_service.update_records(items)
+
+  return {"statusCode": 200,
+          "body": json.dumps(items, cls=UUIDEncoder),
+          }
+
+
 def delete(event, context):
   _id = event["pathParameters"]["id"]
   print(_id)

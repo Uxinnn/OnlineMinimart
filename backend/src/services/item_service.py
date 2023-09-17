@@ -37,6 +37,13 @@ def update_record(item):
   return item
 
 
+def update_records(items):
+  session.bulk_update_mappings(Item, items)
+  session.commit()
+
+  return items
+
+
 def delete_record(_id):
   item = session.query(Item).filter_by(id=_id).first()
   print(item.to_dict())
@@ -45,3 +52,7 @@ def delete_record(_id):
   session.commit()
 
   return item.to_dict()
+
+
+# if __name__ == "__main__":
+#   print(session.bulk_insert_mappings)

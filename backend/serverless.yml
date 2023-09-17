@@ -31,6 +31,12 @@ functions:
       - httpApi:
           path: /web/api/v1/items/{id}
           method: put
+  update-items:
+    handler: src/functions/web/api/v1/items.bulk_update
+    events:
+      - httpApi:
+          path: /web/api/v1/items
+          method: put
   delete-item:
     handler: src/functions/web/api/v1/items.delete
     events:
