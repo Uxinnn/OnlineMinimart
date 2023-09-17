@@ -7,10 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import {getAllItems} from '../Apis.js'
 import ItemCounter from './itemCounter';
 import { Button } from '@mui/material';
-import { editItem } from '../Apis.js';
+import { editItems, getAllItems } from '../Apis.js';
 
 
 const columns = [
@@ -49,9 +48,14 @@ const UserItemList = () => {
   }
 
   const handlePay = () => {
+    const items = [];
     for (const [itemId, itemData] of Object.entries(cart)) {
-      editItem(itemId, {'qty': itemData['item']['qty'] - itemData['count']}, true);
-    };
+      items.push({
+        "id": itemId,
+        "qty": itemData['item']['qty'] - itemData['count']
+      })
+    }
+    editItems(items);
   }
 
   return (

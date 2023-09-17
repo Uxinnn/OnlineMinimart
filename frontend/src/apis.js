@@ -20,18 +20,28 @@ const createItem = (body) => {
   });
 }
 
-const editItem = (id, body, refresh=false) => {
+const editItem = (id, body) => {
   Axios.put(baseUrl + '/web/api/v1/items/' + id, body)
   .then(function (response) {
     console.log(response);
-    if (refresh) {
-      window.location.reload();
-    }
+    window.location.reload();
   })
   .catch(function (error) {
     console.log(error);
   });
 }
+
+const editItems = (body) => {
+  Axios.put(baseUrl + '/web/api/v1/items/', body)
+  .then(function (response) {
+    console.log(response);
+    window.location.reload();
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
+
 
 const deleteItem = (id) => {
   Axios.delete(baseUrl + '/web/api/v1/items/' + id)
@@ -47,6 +57,7 @@ const deleteItem = (id) => {
 export {
   getAllItems, 
   createItem,
-  editItem,  
+  editItem,
+  editItems,
   deleteItem
 };
