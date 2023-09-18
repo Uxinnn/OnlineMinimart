@@ -1,6 +1,6 @@
 # Pat's Online Minimart
 
----
+![Pat's Minimart Logo](imgs/banner_logo.png)
 
 ## Introduction
 
@@ -9,6 +9,21 @@ The minimart has basic CRUD functionality of items it sells and has 2 main views
 
 1. User view for users to purchase items from minimart.
 2. Admin view for admins to manage items in minimart.
+
+## Table of Contents
+* [1. Requirements](#requirements)
+* [2. Getting Started](#getting-started)
+  * [2.1. Pre-deployment Steps](#pre-deployment-steps)
+  * [2.2. Backend](#backend)
+  * [2.3. Frontend](#frontend)
+* [3. Developer Notes](#developer-notes)
+  * [3.1. Backend](#backend-1)
+  * [3.2. Frontend](#frontend-1)
+* [4. Deployment to Cloud](#deployment-to-cloud)
+  * [4.1. Backend](#backend-2)
+  * [4.2. Frontend](#frontend-2)
+* [5. Security Hardening Techniques on the cloud](#security-hardening-techniques-on-the-cloud)
+* [6. API List](#api-list)
 
 ## Requirements
 * Backend
@@ -28,10 +43,10 @@ First deploy the backend (Either using Flask or Serverless Offline), followed by
 1. Download this repository.
 2. `cd backend`.
 3. `pip install -r requirements.txt`.
-   1. If intending to run using Serverless offline (not recommended as the extra steps below are needed).
-   2. `npm install -g serverless`
-   2. `npm install serverless-offline --save-dev`
-   3. `serverless offline --help` to check that Serverless Offline is installed.
+   1. If intending to run using Serverless offline (not recommended as the extra steps below are needed), run the 3 steps below:
+      1. `npm install -g serverless`
+      2. `npm install serverless-offline --save-dev`
+      3. `serverless offline --help` to check that Serverless Offline is installed.
 4. `cd ../frontend`.
 5. `npm install`.
 
@@ -41,7 +56,7 @@ You can choose to deploy the backend using Flask (recommended for evaluating the
 
 #### Deploying using Flask (Recommended for straightforward deployment)
 1. In a terminal, from the root of this repository, `cd backend`.
-2. Run `flask --app main run`.
+2. Run `flask --app main run --port 5000`.
 
 #### Deploying using Serverless Offline
 1. In a terminal, from the root of this repository, `cd backend`.
@@ -61,7 +76,7 @@ The backend is designed using Serverless Framework offline in mind, but can be d
 [SQLAlchemy](https://www.sqlalchemy.org/) is the chosen ORM used to interact with the database (SQLite3). 
 A high level diagram of the backend architecture is shown below:
 
-![Backend Architecture](backend/imgs/backend_architecture.png)
+![Backend Architecture](imgs/backend_architecture.png)
 
 With reference to the diagram above, item data is stored in the sqlite3 database. 
 SQLAlchemy models are then created to model the database. 
@@ -95,7 +110,7 @@ The frontend is created using React and consists of 3 main pages:
 
 The diagram below gives a big overview of how the app will look like if it is deployed to AWS.
 
-![Cloud Architecture](backend/imgs/cloud_architecture.png)
+![Cloud Architecture](imgs/cloud_architecture.png)
 
 Details are elaborated below with reference to this diagram.
 
