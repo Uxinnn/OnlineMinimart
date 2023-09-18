@@ -24,6 +24,7 @@ def create(event, context):
   # Ensure item key and values are valid.
   try:
     validate_item(raw_item, strict=False)
+    raw_item["name"] = raw_item["name"].strip()
   except (KeyError, ValueError, TypeError) as e:
     logging.error(e)
     return unprocessable_entity({})
