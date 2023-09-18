@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, CardContent } from "@mui/material";
 import {Typography} from "@mui/material";
-import {Card, CardActions, Box} from "@mui/material";
+import {Card, CardActions, CardMedia, Box} from "@mui/material";
+import BannerLogo from '../BannerLogo.png'
 
 
 const Home = () => {
@@ -14,8 +15,14 @@ const Home = () => {
         minHeight="80vh"
       >
         <Card sx={{boxShadow: 0}}>
-        <CardContent>
-          <Typography variant='h1' sx={{m: 4}}>Are you Pat?</Typography>
+        <CardMedia
+          component="img"
+          height="194"
+          image={BannerLogo}
+          alt="Welcome Banner"
+        />
+        <CardContent sx={{textAlign: 'center'}}>
+          <Typography variant='h3' sx={{mx: 2}}>Are you Pat?</Typography>
         </CardContent>
         <CardActions sx={{justifyContent: 'center'}}>
           <Button variant="contained" sx={{m: 2}} href="/admin">Yes</Button>

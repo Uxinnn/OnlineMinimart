@@ -1,9 +1,10 @@
 import React from 'react';
-import {Paper, Table, TableBody, TableCell, TableContainer, TableHead,
-  TablePagination, TableRow} from '@mui/material';
-import ItemActions from '../components/ItemActions';
-import ItemCreateDialog from '../components/ItemCreateDialog';
-import {getAllItems} from '../Apis.js'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead,
+  TablePagination, TableRow } from '@mui/material';
+import EditItemButton from '../components/EditItemButton';
+import DeleteItemButton from '../components/DeleteItemButton';
+import CreateItemButton from '../components/CreateItemButton';
+import { getAllItems } from '../Apis.js'
 
 
 const columns = [
@@ -45,7 +46,7 @@ const AdminPage = () => {
   return (
     <div>
       <h2>Items Management Catalog</h2>
-      <ItemCreateDialog />
+      <CreateItemButton />
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 440 }}>
           <Table stickyHeader aria-label="sticky table">
@@ -76,7 +77,8 @@ const AdminPage = () => {
                           return (
                             <TableCell>
                               {/*Contains logic for editing and deleting item*/}
-                              <ItemActions item={row} />
+                              <EditItemButton item={row} />
+                              <DeleteItemButton item={row} />
                             </TableCell>
                             )
                         }
