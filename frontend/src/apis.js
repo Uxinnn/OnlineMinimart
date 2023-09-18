@@ -10,7 +10,7 @@ const getAllItems = () => {
 }
 
 const createItem = (body) => {
-  Axios.post(baseUrl + '/web/api/v1/items/', body)
+  Axios.post(baseUrl + '/web/api/v1/items', body)
   .then(function (response) {
     console.log(response);
     window.location.reload();
@@ -32,7 +32,7 @@ const editItem = (id, body) => {
 }
 
 const editItems = (body) => {
-  Axios.put(baseUrl + '/web/api/v1/items/', body)
+  Axios.put(baseUrl + '/web/api/v1/items', body)
   .then(function (response) {
     console.log(response);
     window.location.reload();
