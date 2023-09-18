@@ -5,6 +5,8 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: '20201221'
+  httpApi:
+    cors: true
 
 functions:
   get-one-item:
@@ -46,4 +48,8 @@ functions:
 
 plugins:
   - serverless-offline
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0
 
