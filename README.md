@@ -48,7 +48,7 @@ First deploy the backend (Either using Flask or Serverless Offline), followed by
       2. `npm install serverless-offline --save-dev`
       3. `serverless offline --help` to check that Serverless Offline is installed.
 4. `cd ../frontend`.
-5. `npm install`.
+5. `npm install`. (This takes a little while, sorry)
 
 ### Backend
 
