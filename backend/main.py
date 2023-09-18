@@ -1,7 +1,7 @@
 from json import dumps
 from flask import Flask, request
 from src.functions.web.api.v1.items import create, get_all, update, bulk_update, delete
-from src.utils import sls_2_flask_response
+from src.utils.standard_responses import sls_2_flask_response
 
 
 """
