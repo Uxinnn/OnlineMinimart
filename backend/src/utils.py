@@ -44,6 +44,10 @@ sample_items = [
 ]
 
 
+def sls_2_flask_response(sls_response):
+  return sls_response["body"], sls_response["statusCode"], sls_response["headers"]
+
+
 # API call return values
 def success(body):
   return {
