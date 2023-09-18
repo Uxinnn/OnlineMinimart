@@ -102,8 +102,17 @@ Some notes on files/directories and their respective uses:
 The frontend is created using React and consists of 3 main pages:
 
 1. `Home`: Landing page for the frontend. Allows users to choose between the admin and client interfaces. Would ideally be substituted with a proper login page.
+
+![Home Page](imgs/homePage.png)
+
 2. `UserPage`: Main client interface. Allows for customers of the minimart to browse and buy items.
+
+![User Page](imgs/userPage.png)
+
 3. `AdminPage`: Main admin interface. Allows for Pat and his employees to manage items displayed in the minimart.
+
+![Admin Page](imgs/adminPage.png)
+![Your Cart](imgs/yourCart.png)
 
 
 ## Deployment to Cloud
