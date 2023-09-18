@@ -20,7 +20,6 @@ if init_db:
   Base.metadata.create_all(engine)
 
 Session = sessionmaker(engine)
-# This session will be used to handle all calls to database
 session = Session(future=True)
 
 if init_db:
@@ -29,3 +28,11 @@ if init_db:
     item = Item(**raw_item)
     session.add(item)
   session.commit()
+
+
+def get_session():
+  Session = sessionmaker(engine)
+  # Creates a new session for a database transaction
+  session = Session(future=True)
+  return session
+
