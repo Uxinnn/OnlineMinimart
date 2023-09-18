@@ -1,6 +1,6 @@
 from json import dumps
 from flask import Flask, request
-from src.functions.web.api.v1.items import create, get_all, update, bulk_update, delete
+from src.functions.web.api.v1.items import create, get_all, update, bulk_update, delete, get
 from src.utils.standard_responses import sls_2_flask_response
 
 
@@ -19,6 +19,18 @@ def get_all_items():
   Also used by admins to see what items the minimart currently has.
   """
   sls_response = get_all(None, None)
+  return sls_2_flask_response(sls_response)
+
+
+@app.get("/web/api/v1/items/<item_id>")
+def get_item(item_id):
+  """
+  Used by customers to browse items in the minimart.
+  Also used by admins to see what items the minimart currently has.
+  """
+  event = {"pathParameters": {"id": item_id},
+           }
+  sls_response = get(event, None)
   return sls_2_flask_response(sls_response)
 
 
